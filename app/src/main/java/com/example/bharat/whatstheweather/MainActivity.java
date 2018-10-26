@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
   public class MainActivity extends AppCompatActivity {
 
@@ -32,11 +33,20 @@ import java.net.URL;
     public void findWeather(View view){
         Log.i("city Name: ", cityName.getText().toString());
 
-        DownloadTask task = new DownloadTask();
-        task.execute("https://api.openweathermap.org/data/2.5/weather?q=" + cityName.getText().toString());
+        try{
 
-        InputMethodManager mgr = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        mgr.hideSoftInputFromWindow(cityName.getWindowToken(), 0);
+            String encodedCityName = URLEncoder.encode( cityName.getText().toString(), "UTF-8");
+
+            DownloadTask task = new DownloadTask();
+            task.execute("https://api.openweathermap.org/data/2.5/weather?q=" + encodedCityName);
+
+            InputMethodManager mgr = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            mgr.hideSoftInputFromWindow(cityName.getWindowToken(), 0);
+
+        }
+        catch(Exception e){
+            Toast.makeText(getApplicationContext(), "Could not find weather", Toast.LENGTH_SHORT);
+        }
     }
 
     public class DownloadTask extends AsyncTask<String, Void, String>{
@@ -67,10 +77,8 @@ import java.net.URL;
                   }
                   return result;
 
-              } catch (MalformedURLException e) {
-                  e.printStackTrace();
-              } catch (IOException e) {
-                  e.printStackTrace();
+              } catch (Exception e) {
+                  Toast.makeText(getApplicationContext(), "Couldn't find the weather", Toast.LENGTH_SHORT);
               }
               return "";
           }
@@ -83,8 +91,6 @@ import java.net.URL;
 
                   String message = "";
 
-                  if(result != null){
-
                   JSONObject jsonObject = new JSONObject(result);
                   String weatherInfo = jsonObject.getString("weather");
 
@@ -92,34 +98,31 @@ import java.net.URL;
 
                   JSONArray arr = new JSONArray(weatherInfo);
 
-                  for (int i=0 ; i<arr.length(); i++){
+                  for (int i = 0; i < arr.length(); i++) {
 
                       JSONObject jsonPart = arr.getJSONObject(i);
 
-                      String main="";
-                      String description="";
+                      String main = "";
+                      String description = "";
 
-                      main =jsonPart.getString("main");
+                      main = jsonPart.getString("main");
                       description = jsonPart.getString("description");
 
-                      if(main != "" && description != ""){
+                      if (main != "" && description != "") {
 
-                          message += main+ ": " + description + "\r\n";
+                          message += main + ": " + description + "\r\n";
 
                       }
                   }
-                  if( message != ""){
+                  if (message != "") {
                       resultTextView.setText(message);
+                  } else {
+                      Toast.makeText(getApplicationContext(), "Wrong City name Entered or Empty City Name", Toast.LENGTH_SHORT).show();
                   }
+              }
+              catch (JSONException e) {
+                  Toast.makeText(getApplicationContext(), "Could not find the weather ", Toast.LENGTH_SHORT);
 
-                  }
-                  else
-                  {
-                      Toast.makeText(getApplicationContext(), "Wrong City name Entered or Empty City Name",Toast.LENGTH_SHORT).show();
-                  }
-
-              } catch (JSONException e) {
-                  e.printStackTrace();
               }
 
 
