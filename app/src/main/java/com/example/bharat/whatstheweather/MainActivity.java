@@ -1,10 +1,12 @@
   package com.example.bharat.whatstheweather;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -31,8 +33,10 @@ import java.net.URL;
         Log.i("city Name: ", cityName.getText().toString());
 
         DownloadTask task = new DownloadTask();
-        task.execute("https://samples.openweathermap.org/data/2.5/weather?q=" + cityName.getText().toString() + ",uk&appid=b6907d289e10d714a6e88b30761fae22");
+        task.execute("https://api.openweathermap.org/data/2.5/weather?q=" + cityName.getText().toString());
 
+        InputMethodManager mgr = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.hideSoftInputFromWindow(cityName.getWindowToken(), 0);
     }
 
     public class DownloadTask extends AsyncTask<String, Void, String>{
