@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,6 +19,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
   public class MainActivity extends AppCompatActivity {
+
+    EditText cityName;
+
+
+    public void findWeather(View view){
+        Log.i("city Name: ", cityName.getText().toString());
+
+        DownloadTask task = new DownloadTask();
+        task.execute("api.openweathermap.org/data/2.5/weather?q=" + cityName.getText().toString());
+
+    }
 
     public class DownloadTask extends AsyncTask<String, Void, String>{
 
@@ -89,5 +102,8 @@ import java.net.URL;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        cityName = (EditText)findViewById(R.id.cityName);
+
     }
 }

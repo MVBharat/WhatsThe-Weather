@@ -27,23 +27,24 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="city"
+        android:hint="Ex: Bangalore"
         android:layout_below="@+id/textView"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:textColor="#ffffff"
-        android:id="@+id/cityEdit"
+        android:id="@+id/cityName"
         />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/cityEdit"
+        android:layout_below="@+id/cityName"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:fontFamily="serif"
         android:textAllCaps="false"
+        android:onClick="findWeather"
         android:text="What's The Weather?"
         android:textSize="18sp"
 
@@ -56,6 +57,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="150dp"
         android:text=""
+        android:id="@+id/resultTextView"
         android:textColor="#ffffff"
         android:textSize="20sp" />
 
